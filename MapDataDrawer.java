@@ -60,8 +60,13 @@ public class MapDataDrawer
    * @return the index of the row with the lowest value in the given col for the grid
    */
   public  int indexOfMinInCol(int col){
-    
-    return -1;
+    int indexminInCol = grid[0][col];
+    for(int i = 0 ; i < grid.length ; i++){
+      if(grid[i][col]< indexminInCol){
+        indexminInCol = grid[i][col];
+      }
+    }
+    return indexminInCol;
   }
   
   /**
@@ -69,10 +74,15 @@ public class MapDataDrawer
    * Colors should be grayscale values 0-255, scaled based on min/max values in grid
    */
   public void drawMap(Graphics g){
-    
-    
-    
-    
+    int rows = grid.length;
+    int cols = grid[0].length;
+    for(int x = 0; x < cols; x++) {
+      for (int y = 0; y < rows; y++) {
+        int c = (grid[y][x]-findMinValue())/((findMaxValue()- findMinValue())/255);
+        g.setColor(new Color(c,c,c));
+        g.fillRect(x, y, 1,1);
+      }
+    }
   }
   
   /**
