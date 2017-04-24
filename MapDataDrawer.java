@@ -10,31 +10,49 @@ public class MapDataDrawer
   public MapDataDrawer(String filename, int rows, int cols){
     // initialize grid 
     //read the data from the file into the grid
-    Scanner scanner = new Scanner(filename);
-    while (scanner.hasNext()) {
-      if (scanner.hasNextInt()) {
-        for(int i=0;i<rows;i++){
-          for(int j=0;j<cols;j++){
-            grid[rows][cols]=scanner.nextInt();
-          }
+    
+    try {
+      File file = new File(filename);
+      Scanner scan = new Scanner(file);
+      grid=new int[rows][cols];
+      for(int i=0;i<rows;i++){
+        for(int j=0;j<cols;j++){
+          grid[i][j] = scan.nextInt();
         }
-      } else {
-        scanner.next();
       }
-    }
+    }catch(FileNotFoundException e){
+      System.out.println("xx");
+    }       
   }
-  
   /**
    * @return the min value in the entire grid
    */
   public int findMinValue(){
-    return -1;    
+    int rows = grid.length;
+    int cols = grid[0].length;
+    int min = grid[0][0];
+    for(int i=0;i<rows;i++){
+      for(int j=0;j<cols;j++){
+        if(grid[i][j]<min)
+          min=grid[i][j];
+      }
+    }
+    return min;    
   }
   /**
    * @return the max value in the entire grid
    */
   public int findMaxValue(){
-    return -1;
+    int rows = grid.length;
+    int cols = grid[0].length;
+    int max = grid[0][0];
+    for(int i=0;i<rows;i++){
+      for(int j=0;j<cols;j++){
+        if(grid[i][j]>max)
+          max=grid[i][j];
+      }
+    }
+    return max;    
   }
   
   /**
