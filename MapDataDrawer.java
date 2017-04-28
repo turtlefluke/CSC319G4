@@ -96,31 +96,40 @@ public class MapDataDrawer
    * @return the total change in elevation traveled from West-to-East
    */
   public int drawLowestElevPath(Graphics g, int row){
-    int top,mid,low,sum;
+    int top,mid,low,sum=0;
     int lengthTop,lengthMid,lengthLow;
     int findMin;
-    int n=grid[row][0];
-    for(int j=0;j<grid[0].length;j++){
-      int currow = grid[row][j];
-      top=grid[row-1][j+1];
-      mid=grid[row][j+1];
-      low=grid[row+1][j+1];
-      lengthTop = Math.abs(currow-top);
-      lengthMid = Math.abs(currow-mid);
-      lengthLow = Math.abs(currow-low);
+    for(int j=1;j<grid[0].length;j++){
+      
+      int currow = grid[row][j-1];
+      
       if(row==0){
+        mid=grid[row][j];
+        low=grid[row+1][j];
+        lengthMid = Math.abs(currow-mid);
+        lengthLow = Math.abs(currow-low);
         findMin = Math.min(lengthMid,lengthLow);
         if(lengthMid!=lengthLow){
           row++;
         }
       }
       else if(row==grid.length-1){
+        top=grid[row-1][j];
+        mid=grid[row][j];
+        lengthTop = Math.abs(currow-top);
+        lengthMid = Math.abs(currow-mid);
         findMin = Math.min(lengthMid,lengthTop);
         if(lengthMid!=lengthTop){
           row--;
         }
       }
       else{
+        top=grid[row-1][j];
+        mid=grid[row][j];
+        low=grid[row+1][j];
+        lengthTop = Math.abs(currow-top);
+        lengthMid = Math.abs(currow-mid);
+        lengthLow = Math.abs(currow-low);
         findMin = Math.min(Math.min(lengthMid,lengthTop),lengthLow);
         if(lengthTop!=lengthMid&&lengthMid!=lengthLow){
           if(lengthTop==findMin){
@@ -130,17 +139,34 @@ public class MapDataDrawer
             row++;
           }
         }
+        else if(lengthTop==lengthLow){
+          int rd = (int)(Math.random()*1)+1;
+          if(rd==lengthTop)
+            row--;
+          else
+            row++;
+        }
       }
+      sum+=findMin;
       g.fillRect(j, row, 1,1);
+      
     }
-    return 0;
+    return sum;
   }
   
   /**
    * @return the index of the starting row for the lowest-elevation-change path in the entire grid.
    */
   public int indexOfLowestElevPath(Graphics g){
-    return -1;
+    int index=0;
+    int min=drawLowestElevPath(g, 0);
+    for(int i=1;i<grid.length;i++){
+      if(drawLowestElevPath(g, i)<min){
+        min=drawLowestElevPath(g, i);
+        index=i;
+      }
+    }
+    return index;
     
   }
   
