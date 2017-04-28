@@ -10,7 +10,7 @@ public class Driver
         Graphics g = panel.getGraphics();
         
         //Test Step 1 - construct mountain map data
-        MapDataDrawer map = new MapDataDrawer("D:\\เรียน\\CSC105\\Nifty\\Colorado_844x480.dat", 480, 844);
+        MapDataDrawer map = new MapDataDrawer("Colorado_844x480.dat", 480, 844);
         
         //Test Step 2 - min, max, minRow in col
         int min = map.findMinValue();
