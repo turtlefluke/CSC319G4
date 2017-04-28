@@ -78,9 +78,12 @@ public class MapDataDrawer
   public void drawMap(Graphics g){
     int rows = grid.length;
     int cols = grid[0].length;
+    int min = findMinValue();
+    int max = findMaxValue();
+    int delta = max-min;
     for(int x = 0; x<rows;x++) {
       for (int y = 0;y<cols;y++) {
-        int c = (grid[x][y]-findMinValue())/((findMaxValue()- findMinValue())/255);
+        int c = (grid[x][y]-min)/((delta)/255);
         g.setColor(new Color(c,c,c));
         g.fillRect(y, x, 1,1);
       }
@@ -93,88 +96,44 @@ public class MapDataDrawer
    * @return the total change in elevation traveled from West-to-East
    */
   public int drawLowestElevPath(Graphics g, int row){
-    int cols = grid[0].length;
-    int res=grid[row][0];
-    int thatrow = row;
-    int ran;
-    int minnoi;
-    for (int j = 0;j<cols;j++) {
+    int top,mid,low,sum;
+    int lengthTop,lengthMid,lengthLow;
+    int findMin;
+    int n=grid[row][0];
+    for(int j=0;j<grid[0].length;j++){
       int currow = grid[row][j];
-      if(j!=0){
-        int length1 = Math.abs(currow-grid[row-1][j]);
-        int length2 = Math.abs(currow-grid[row][j]);
-        int length3 = Math.abs(currow-grid[row+1][j]);
-        if(row==0){
-          if(length2==length3){
-            ran = (int)(Math.random()*1)+1;
-            if(ran==1){
-              res+=length2;
-              row=thatrow;
-            }
-            if(ran==2){
-              res+=length3;
-              row++;
-            }
-          }
-          else{
-            minnoi = Math.min(length2,length3);
-            res+=minnoi;
-            if(minnoi==length2){
-              row=thatrow;
-            }
-            if(minnoi==length3){
-              row++;
-            }
-          }
+      top=grid[row-1][j+1];
+      mid=grid[row][j+1];
+      low=grid[row+1][j+1];
+      lengthTop = Math.abs(currow-top);
+      lengthMid = Math.abs(currow-mid);
+      lengthLow = Math.abs(currow-low);
+      if(row==0){
+        findMin = Math.min(lengthMid,lengthLow);
+        if(lengthMid!=lengthLow){
+          row++;
         }
-        
-        else if(row==grid.length-1){
-          if(length1==length2){
-            ran = (int)(Math.random()*1)+1;
-            if(ran==1){
-              res+=length1;
-              row--;
-            }
-            if(ran==2){
-              res+=length2;
-              row=thatrow;
-            }
-          }
-          else{
-            minnoi = Math.min(length1,length2);
-            res+=minnoi;
-            if(minnoi==length1){
-              row--;
-            }
-            if(minnoi==length2){
-              row=thatrow;
-            }
-          }
-        }
-        
-        else{
-          minnoi = Math.min(Math.min(length1,length2),length3);
-          if(length1==minnoi && length3==minnoi){
-            ran = (int)(Math.random()*1)+1;
-            if(ran==1){
-              res+=length1;
-              row--;
-            }
-            if(ran==2){
-              res+=length3;
-              row++;
-            }
-          }
-          else if(length1==minnoi || length2==minnoi){
-            res+=length2;
-            row=thatrow;
-          }
-        }
-        g.fillRect(j,row,1,1);
       }
+      else if(row==grid.length-1){
+        findMin = Math.min(lengthMid,lengthTop);
+        if(lengthMid!=lengthTop){
+          row--;
+        }
+      }
+      else{
+        findMin = Math.min(Math.min(lengthMid,lengthTop),lengthLow);
+        if(lengthTop!=lengthMid&&lengthMid!=lengthLow){
+          if(lengthTop==findMin){
+            row--;
+          }
+          else if(lengthLow==findMin){
+            row++;
+          }
+        }
+      }
+      g.fillRect(j, row, 1,1);
     }
-    
-    return res;
+    return 0;
   }
   
   /**
