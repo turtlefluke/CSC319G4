@@ -109,7 +109,8 @@ public class MapDataDrawer
         lengthMid = Math.abs(currow-mid);
         lengthLow = Math.abs(currow-low);
         findMin = Math.min(lengthMid,lengthLow);
-        if(lengthMid!=lengthLow){
+
+        if(lengthMid>lengthLow&&lengthMid!=lengthLow){
           row++;
         }
       }
@@ -119,7 +120,8 @@ public class MapDataDrawer
         lengthTop = Math.abs(currow-top);
         lengthMid = Math.abs(currow-mid);
         findMin = Math.min(lengthMid,lengthTop);
-        if(lengthMid!=lengthTop){
+
+        if(lengthMid>lengthTop&&lengthMid!=lengthTop){
           row--;
         }
       }
@@ -131,6 +133,7 @@ public class MapDataDrawer
         lengthMid = Math.abs(currow-mid);
         lengthLow = Math.abs(currow-low);
         findMin = Math.min(Math.min(lengthMid,lengthTop),lengthLow);
+
         if(lengthTop!=lengthMid&&lengthMid!=lengthLow){
           if(lengthTop==findMin){
             row--;
@@ -139,9 +142,9 @@ public class MapDataDrawer
             row++;
           }
         }
-        else if(lengthTop==lengthLow){
+        else if(findMin==lengthTop||findMin==lengthLow){
           int rd = (int)(Math.random()*1)+1;
-          if(rd==lengthTop)
+          if(rd==2)
             row--;
           else
             row++;
